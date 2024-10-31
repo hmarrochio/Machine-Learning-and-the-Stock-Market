@@ -68,4 +68,11 @@ We can calculate the eigenvalues for the correlation matrices
 
 ### Describe your results
 
+Here is a heatmap animation
+
+[View HTML heatmap](https://drive.google.com/file/d/1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU/view?usp=sharing)
+
+RMT fit to the data eigenvalues
+
+
 ![Eig](https://drive.google.com/uc?export=view&id=1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU)
