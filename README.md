@@ -49,7 +49,7 @@ There are three csv files:
    - `Adj Close`: The adjusted close price, it takes into account company actions, such as paying dividends as well as stock splits.
 
 
-   We will also calculate with `Adj Close` the `Return` $\frac{P_{t} - P_{t-1}}{P_{t-1}}$ and `Log-return` $\left( \frac{P_{t}}{P_{t-1}}\right)$, where $P_t$ is the `Adj Close` price at day $t$.
+   We will also calculate with `Adj Close` the `Return` $\frac{P_{t} - P_{t-1}}{P_{t-1}}$ and `Log-return` $\mathrm{log} \left( \frac{P_{t}}{P_{t-1}}\right)$, where $P_t$ is the `Adj Close` price at day $t$.
 
 
 
@@ -68,4 +68,4 @@ We can calculate the eigenvalues for the correlation matrices
 
 ### Describe your results
 
-![EigRnd](https://drive.google.com/file/d/1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU/view)
+![EigRnd](https://drive.google.com/file/d/1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU/preview)
