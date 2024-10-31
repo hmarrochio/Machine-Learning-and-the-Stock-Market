@@ -10,7 +10,7 @@ clustering and forecasting.
 
 
 
-### Describe your goal
+### Goal
 
 My goal is to investigate whether characterizing randomness from RMT techniques can help learning algorithms for better prediction in the stock market.
 
@@ -19,7 +19,7 @@ The expectation is that benchmarking the range of randomness in the data, we can
 If time permits, I want also to investigate simple forecasting models that take into account the results from clustering in order to distribute the portfolio weigths accross different stocks. One interesting possiblity is to construct a simple model with reinforcement learning.
 
 
-### Describe your data
+### Data Description
 
 https://www.kaggle.com/datasets/andrewmvd/sp-500-stocks
 
@@ -54,7 +54,7 @@ There are three csv files:
 
 
 
-### Describe your work (models, analysis, EDA, etc.)
+### Overview about EDA
 
 The first step on my EDA is simply to learn about the properties of the companies in S&P-500, which ones are the companies that has a bigger participation in market capital, which sectors are more represented. 
 
@@ -62,17 +62,16 @@ Another important aspect of the preliminary EDA is to understand the presence of
 
 Next, we calculate return and log-return, selecting companies by 2 major criteria: top N stocks ordered by `Weight` or simply picking at random N stocks (always making sure there are no null values for the date range of interest). We can transform the data, choose a time period and then calculate correlation matrices between each stock.
 
-At least for this part of the analysis, correlation matrices are the most important piece of data we construct. For such, we explore how 
+At least for this part of the analysis, correlation matrices are the most important piece of data we construct. For such, we explore how to select the stocks to be analyzed, as well as the time period we use to calculate the correlation matrix with respect to `Return`. One difficulty is that using longer periods of time is useful for isolating signal, but it also dilutes many interactions between the stocks. Exploring how to navigate these constraints will be a major contender during my capstone.
 
-We can calculate the eigenvalues for the correlation matrices
+Finally, we can calculate the eigenvalues for the correlation matrices between stock symbols. By analyzing the structure of the distribution of the eigenvalues, we can isolate which range is most likely due to random correlations, by fitting to the expectation of RMT and the Marcenko-Pastur pdf.
 
-### Describe your results
+### Preliminary Results
 
-Here is a heatmap animation
 
-[View HTML heatmap](https://drive.google.com/file/d/1-4tIM_YUhCMLT3mUFikDUBt7I-67IxnB//view?usp=sharing)
-
-RMT fit to the data eigenvalues
+For now, I am describing the main result from EDA. By considering enough stocks and analyzing a long period of data (5 years), we have a nice isolation of the eigenvalues most likely due to randomness. We follow the procedure described in the book `Machine Learning for Asset Managers` by Lopéz de Prado. 
 
 
 ![Eig](https://drive.google.com/uc?export=view&id=1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU)
+
+The next step is to use a regularization scheme for the noisy eigenvalues, called __"denoising"__ and investigate clusters within the stocks.
