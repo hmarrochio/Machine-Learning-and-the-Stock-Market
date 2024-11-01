@@ -73,7 +73,7 @@ For now, I am describing the main result from EDA so far.
 First, let us introduce the expectation from RMT. If one is to sample correlation functions constructed by rectangular random matrices (size $T\times N$), in the large $T,N$ limit ($T,N \rightarrow  \infty$ with $T/N$ fixed), the statistics of the eigenvalues of the correlation matrix follows a specific pdf, called Marcenko-Pastur. For instance, one can verify this fact by generating enough data, as we show in the plot below.
 
 
-![Eig](https://drive.google.com/uc?export=view&id=1Vniufo2MudVenKXDcMmgCCbw_XR8OM34)
+![Eig](https://drive.google.com/uc?export=view&id=1Y0mi7VzlkdOFQBry2aX-qbhkqW05zxGY)
 
 The important thing to notice is that the range of influence of __randomness is confined to a range of eigenvalues__! Therefore, if we can  identify our data between signal and randomness, the hope is that learning algorithms can make more precise predictions.
 
