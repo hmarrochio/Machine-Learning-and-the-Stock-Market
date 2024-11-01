@@ -4,9 +4,7 @@
 ### Random Matrix Theory and the Stock Market
 
 Predicting the stock market is a very complicated task. I plan to use techniques from Physics and Mathematics, in particular insights from Random Matrix Theory, in order to characterize randomness in the dataset, and use it as a regularization in order to explore
-clustering and forecasting.
-
-
+machine learning models of clustering and forecasting.
 
 
 
@@ -14,7 +12,7 @@ clustering and forecasting.
 
 My goal is to investigate whether characterizing randomness from RMT techniques can help learning algorithms for better prediction in the stock market.
 
-The expectation is that benchmarking the range of randomness in the data, we can strengthen the "true" correlation between stocks. I will then investigate clustering algorithms, possibly investigate K-clustering with distance metrics constructed with respect to the correlation matrix, as well as other information theory quantities, such as mutual information.
+The expectation is that by benchmarking the range of randomness in the data, we can highlight the "true" signal between stocks. I will then investigate clustering algorithms, possibly K-clustering with distance metrics constructed with respect to the correlation matrix, as well as other information theory quantities, such as mutual information.
 
 If time permits, I want also to investigate simple forecasting models that take into account the results from clustering in order to distribute the portfolio weigths accross different stocks. One interesting possiblity is to construct a simple model with reinforcement learning.
 
@@ -23,7 +21,7 @@ If time permits, I want also to investigate simple forecasting models that take 
 
 https://www.kaggle.com/datasets/andrewmvd/sp-500-stocks
 
-My data contains information about Standard and Poor (S&P-500), list of the top 500 companies trading in the stock market. It contains 503 Symbol names because Alphabet, Fox Corporation and News Corporation trade each under two different symbols. It contains data from 2010 and is updated daily, I consolidated by downloading it on October 22nd 2024. 
+My data contains information about Standard and Poor (S&P-500), the top 500 companies listed trading in the United States. It contains 503 Symbol names because "Alphabet", "Fox Corporation" and "News Corporation" trade each under two different symbols. It contains data from 2010 and is updated daily. I consolidated by downloading it on October 22nd 2024. 
 
 There are three csv files:
 
