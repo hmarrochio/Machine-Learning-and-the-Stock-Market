@@ -4,7 +4,7 @@
 ### Random Matrix Theory and the Stock Market
 
 Predicting the stock market is a very complicated task. I plan to use techniques from Physics and Mathematics, in particular insights from Random Matrix Theory, in order to characterize randomness in the dataset, and use it as a regularization in order to explore
-machine learning models of clustering and forecasting.
+machine learning models of clustering and (if time permits) forecasting.
 
 
 
@@ -67,9 +67,22 @@ Finally, we can calculate the eigenvalues for the correlation matrices between s
 ### Preliminary Results
 
 
-For now, I am describing the main result from EDA. By considering enough stocks and analyzing a long period of data (5 years), we have a nice isolation of the eigenvalues most likely due to randomness. We follow the procedure described in the book `Machine Learning for Asset Managers` by Lopéz de Prado. 
+For now, I am describing the main result from EDA so far.
+
+
+First, let us introduce the expectation from RMT. If one is to sample correlation functions constructed by rectangular random matrices (size $T\times N$), in the large $T,N$ limit ($T,N \rightarrow  \infty$ with $T/N$ fixed), the statistics of the eigenvalues of the correlation matrix follows a specific pdf, called Marcenko-Pastur. For instance, one can verify this fact by generating enough data, as we show in the plot below.
+
+
+![Eig](https://drive.google.com/uc?export=view&id=1Vniufo2MudVenKXDcMmgCCbw_XR8OM34)
+
+The important thing to notice is that the range of influence of __randomness is confined to a range of eigenvalues__! Therefore, if we can  identify our data between signal and randomness, the hope is that learning algorithms can make more precise predictions.
+
+
+Now, we consider $100$ stocks and analyze a long period of data (5 years). One can see an isolation of the eigenvalues most likely due to randomness. We follow the procedure described in the book `Machine Learning for Asset Managers` by Lopéz de Prado. 
 
 
 ![Eig](https://drive.google.com/uc?export=view&id=1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU)
+
+We see here that most signal is within RMT range, but a few eigenvalues are clearly signal 
 
 The next step is to use a regularization scheme for the noisy eigenvalues, called __"denoising"__ and investigate clusters within the stocks.
