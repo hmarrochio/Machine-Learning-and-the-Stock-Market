@@ -83,6 +83,6 @@ Now, we consider $100$ stocks and analyze a long period of data (5 years). One c
 
 ![Eig](https://drive.google.com/uc?export=view&id=1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU)
 
-We see here that most signal is within RMT range, but a few eigenvalues are clearly signal 
+We see here that most signal is within RMT range, but a few eigenvalues are clearly signal!
 
 The next step is to use a regularization scheme for the noisy eigenvalues, called __"denoising"__ and investigate clusters within the stocks.
