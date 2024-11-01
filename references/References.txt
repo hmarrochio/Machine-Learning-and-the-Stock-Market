@@ -1,0 +1,8 @@
+References:
+
+1. Lopez de Prado, Marcos M (2020), Machine Learning for Asset Managers, Cambridge University Press.
+
+2. Gopikrishnan, Parameswaran and Plerou, Vasiliki and Nunes Amaral, Luis A. and Meyer, Martin and Stanley, H. Eugene (1999). Scaling of the distribution of fluctuations of financial market indices, Phys. Rev. E, 60 5 (5305--5316)
+
+3. Laloux, Laurent and Cizeau, Pierre and Potters, Marc and Bouchaud, Jean-Philippe (2000). Random Matrix Theory and Financial Correlations, International Journal of Theoretical and Applied Finance, Vol. 03, No. 03, pp. 391-397 
+
