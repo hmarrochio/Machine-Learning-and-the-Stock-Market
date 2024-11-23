@@ -1,4 +1,4 @@
-# CAPSTONE SPRINT 1 - README
+# CAPSTONE SPRINT 2 - README
 
 
 ### Random Matrix Theory and the Stock Market
@@ -92,16 +92,32 @@ The RMT analysis has deep relation to Principal Component Analysis. In fact, PCA
 1. The eigenvalues __outside__ the random range should correspond to signal, characterizing stocks that move together. We can therefore use this input as the number of relevant PCA directions.
 2. Since the information present in the random range is most likely due to noise, it makes sense to __flatten__ the structure of the corresponding eigenvalues. This technique is called __denoising__.
 
-Our qualitative analysis is that the clustering algorithm performed better after the denoising regularization. 
+Our qualitative analysis is that the clustering algorithm performed better after the denoising regularization. We follow the denoising procedure described in the Prado-Lopez book. In the image below, we show the log of the eigenvalues, before and after applying the denoising regularization.
 
 ![LogEig](https://drive.google.com/uc?export=view&id=130g0W28YxwgatYN8Kw1RSAlzrLXKNxqr)
+
+Notice that for the eigenvalues __outside__ the random range, they remain the same. However, for the eigenvalues associated to randomness, denoising removes the structure to a flat plateau (while maintaining the trace of the correlation matrix). The expectation is that a clustering algorithm will more efficiently distinguish stocks as there are less structures due to randomness.
 
 
 
 ### Unsupervised Machine Learning Modeling - Clustering
 
+For the first modeling analysis, we perform unsuperviser learning techniques in order to find stocks that are deeply related to each other. Notice that the model is agnostic in terms of industry: all the information we are analyzing is the `Log-Return` correlation between 100 stocks, using 5 years of data. 
 
-![ClustHeat](https://drive.google.com/uc?export=view&id=1VfSO8XKhZeq3aPLIyXiqa68XZ68EqPI9)
+Our main analysis consists of testing 3 different clustering algorithms with sklearn packages. We try `K-means`, `Agglomerative Clustering` and `Gaussian Mixture`, deciding on the size of clustering by the _sillhoutte score_. We also perform denoising as described in the previous section, as well as PCA for dimensional reduction focusing on the number of directions outside the random range.
+
+Here we the _sillhoutte score_ with respect to the 3 algorithms analyzed. We choose `k=16` and `Agglomerative Clustering`, having fewer clustering classes could be useful to inspect qualitately if the clustering algorithm 
+
+![Sil](https://drive.google.com/uc?export=view&id=1eb4IqxOv_99tp9F8d8XzwxwvYbWOGTUh)
+
+One visual way to 
+
+![UnclustHeat](https://drive.google.com/uc?export=view&id=1VfSO8XKhZeq3aPLIyXiqa68XZ68EqPI9)
+
+
+Here we see the effect of clustering
+
+![ClustHeat](https://drive.google.com/uc?export=view&id=1NFeP-Do0u-ZfQK2TdBzLGu1sAmdDMWCT)
 
 
 ### Forecasting Time Series - Preliminary Analysis
