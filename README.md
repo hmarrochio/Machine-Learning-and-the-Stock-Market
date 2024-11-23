@@ -64,10 +64,8 @@ At least for this part of the analysis, correlation matrices are the most import
 
 Finally, we can calculate the eigenvalues for the correlation matrices between stock symbols. By analyzing the structure of the distribution of the eigenvalues, we can isolate which range is most likely due to random correlations, by fitting to the expectation of RMT and the Marcenko-Pastur pdf.
 
-### Preliminary Results
+### Eigenvalue Analysis and Denoising
 
-
-For now, I am describing the main result from EDA so far.
 
 
 First, let us introduce the expectation from RMT. If one is to sample correlation functions constructed by rectangular random matrices (size $T\times N$), in the large $T,N$ limit ($T,N \rightarrow  \infty$ with $T/N$ fixed), the statistics of the eigenvalues of the correlation matrix follows a specific pdf, called Marcenko-Pastur. This pdf depends on only two parameters,
@@ -87,6 +85,23 @@ Next, we consider $100$ stocks and analyze a long period of data (5 years). One 
 
 ![Eig](https://drive.google.com/uc?export=view&id=1PkNn3fLebaBrvv4U4TyH9PRe_wWf-ihU)
 
-We see here that most signal is within RMT range, but a few eigenvalues are clearly signal! A literature review shows this is pretty characteristic of stock data, where most eigenvalues are in the random zone.
+We see here that most signal is within RMT range, but a few eigenvalues are clearly signal! A literature review shows this is pretty characteristic of stock data, where it is expected that most eigenvalues are in the random zone.
 
-The next step is to use a regularization scheme for the noisy eigenvalues, called __"denoising"__ and investigate clusters within the stocks.
+The RMT analysis has deep relation to Principal Component Analysis. In fact, PCA consists of precisely finding the directions in the data where the variance is largest, which is precisely done by evaluating the eigenvalue structure of correlation matrix! There are however two additional insights about characterizing the random range of eigenvalues:
+
+1. The eigenvalues __outside__ the random range should correspond to signal, characterizing stocks that move together. We can therefore use this input as the number of relevant PCA directions.
+2. Since the information present in the random range is most likely due to noise, it makes sense to __flatten__ the structure of the corresponding eigenvalues. This technique is called __denoising__.
+
+Our qualitative analysis is that the clustering algorithm performed better after the denoising regularization. 
+
+![LogEig](https://drive.google.com/uc?export=view&id=130g0W28YxwgatYN8Kw1RSAlzrLXKNxqr)
+
+
+
+### Unsupervised Machine Learning Modeling - Clustering
+
+
+![ClustHeat](https://drive.google.com/uc?export=view&id=1VfSO8XKhZeq3aPLIyXiqa68XZ68EqPI9)
+
+
+### Forecasting Time Series - Preliminary Analysis
