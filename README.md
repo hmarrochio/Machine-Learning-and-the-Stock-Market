@@ -110,14 +110,18 @@ Here we the _sillhoutte score_ with respect to the 3 algorithms analyzed. We cho
 
 ![Sil](https://drive.google.com/uc?export=view&id=1eb4IqxOv_99tp9F8d8XzwxwvYbWOGTUh)
 
-One visual way to 
-
-![UnclustHeat](https://drive.google.com/uc?export=view&id=1VfSO8XKhZeq3aPLIyXiqa68XZ68EqPI9)
+Let us visually show what the clustering algorithm found in terms of the correlation matrix. First, this is the correlation matrix of the top 100 stocks, where the stocks are simply ordered alphabetically. Notice that there are some local structure but hard to pinpoint exactly which groups belong together.  
 
 
-Here we see the effect of clustering
+![UnClustHeat](https://drive.google.com/uc?export=view&id=1NFeP-Do0u-ZfQK2TdBzLGu1sAmdDMWCT)
 
-![ClustHeat](https://drive.google.com/uc?export=view&id=1NFeP-Do0u-ZfQK2TdBzLGu1sAmdDMWCT)
 
+In the figure below, we simply re-ordered the stocks with respect to the cluster labels produced by the learning algorithm! Simply by reordering the correlation matrix, we see lots of inter and intracluster structures of rectangular shape!
+
+![ClustHeat](https://drive.google.com/uc?export=view&id=1VfSO8XKhZeq3aPLIyXiqa68XZ68EqPI9)
+
+It is worth mentioning that by investigating the individual clusters, we can see which stocks are related (more details in the analysis of Jupyter Notebook 3). For instance, healthcare, financial and oil and gas stocks were each very clearly labelled in their own cluster group. We also found some interesting relations: big tech companies such as Microsfot and credit card companies such as Visa and Mastercard were in the same cluster group, which possibly is due to credit card companies and expandion of online shopping being so related.
+
+This clustering analysis was done by denoising the correlation matrix. In Jupyter Notebook 3, we show that under similar circumstances, the clustering algorithm did not perform as well if the original data was not denoised. Despite similar sillhoutte score, the clusters generate a few classes with two many industries joined, as well as some classes almost empty - one of them only had `Google` stocks. So at least as a first impression, it seems that denoising was a useful technique for clustering.
 
 ### Forecasting Time Series - Preliminary Analysis
