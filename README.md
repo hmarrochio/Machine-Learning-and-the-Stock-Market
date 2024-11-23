@@ -4,17 +4,24 @@
 ### Random Matrix Theory and the Stock Market
 
 Predicting the stock market is a very complicated task. I plan to use techniques from Physics and Mathematics, in particular insights from Random Matrix Theory, in order to characterize randomness in movements of stocks, and use it as regularization in order to explore
-machine learning models of clustering and (if time permits) incorporating these insights for forecasting portfolio strategies.
+machine learning models of clustering, time series forecasting and incorporate these insights for portfolio strategies.
 
 
 
 ### Goal
 
-My goal is to investigate whether characterizing randomness from RMT techniques can help learning algorithms for better prediction in the stock market.
 
-The expectation is that by benchmarking the range of randomness in the data, we can highlight the "true" signal between stocks. I will then investigate clustering algorithms, possibly K-clustering with distance metrics constructed with respect to the correlation matrix, as well as other information theory quantities, such as mutual information.
+Studying stock market data is a great laboratory for testing the efficacy of machine learning techniques. An important challenge in the industry is portfolio optimization: given risk and uncertainty, how can one maximize returns over time? Machine learning offers valuable insights here. For instance, unsupervised learning can be used to cluster together similar stocks, which is useful for portfolio diversification by avoiding focusing resources in similar stocks. In addition, the past few years have witnessed important developement in deep learning applications across industries, solving complex problems with non-linear predictive capabilities. Since some techniques are still quite recent, it is worth asking how effectively can deep learning techniques analyze historical stock data for improved predictions.
 
-If time permits, I want also to investigate simple forecasting models that take into account the results from clustering in order to distribute the portfolio weigths accross different stocks. One interesting possiblity is to construct a simple model with reinforcement learning.
+
+This project has two main objectives: first, to use real stock data as a learning tool for exploring and practicing various machine learning techniques; second, to investigate whether insights from Random Matrix Theory (RMT) can improve the predictions from these algorithms. While the practical application of these methods to actual investment strategies involves many nuances, this project focuses on exploring these ideas in a theoretical and experimental framework by analyzing historical data.
+
+
+By benchmarking the range of randomness in the data using RMT techniques, we aim to uncover the "true" signal between stocks. If the correlation between stocks are less influenced by random data, clustering algorithms should better identify stock similarities.  At least at this stage, this is exactly what we find: denoising the correlation matrix is a useful technique for clustering the correlation matrix! Among the three clustering algorithms tested, Agglomerative Clustering performed the best for this task.
+
+Next, we shift gears to time series prediction. The goal is to test machine learning algorithms in order to predict future prices of stocks, as this information is crucial to optimize portfolio strategies. For now, we focus on predictions using ARIMA and Recurrent Neural Networks. 
+
+For future developments, I plan to explore advanced deep learning models such LSTM, GRU, and Transformers. Once a successful baseline model is established, I intend to revisit the portfolio optimization problem using these insights.
 
 
 ### Data Description
