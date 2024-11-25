@@ -132,3 +132,54 @@ It is worth mentioning that by investigating the individual clusters, we can see
 This clustering analysis was done by denoising the correlation matrix. In Jupyter Notebook 3, we show that under similar circumstances, the clustering algorithm did not perform as well if the original data was not denoised. Despite similar sillhoutte score, the clusters generate a few classes with two many industries joined, as well as some classes almost empty - one of them only had `Google` stocks. So at least as a first impression, it seems that denoising was a useful technique for clustering.
 
 ### Forecasting Time Series - Preliminary Analysis
+
+In this section we present some preliminary results from time series analysis. We evaluate naive forecasting, ARIMA and Recurrent Neural Networks (RNN). The metric I am using to evaluate model performance is Mean Squared Error with the test data. We divide the training data into 2 years of trading, and the test as 4 months. 
+
+We test both `Log-Return` and `Adj Close` (price) for prediction, but here I will focus on showing the results for the price.
+
+
+
+
+
+
+![ArimaAll](https://drive.google.com/uc?export=view&id=1zGYA8FuDwPI9lSYMKI3lJ844NyRlCbIT)
+
+
+![RNNAll](https://drive.google.com/uc?export=view&id=1xCgGa6KosnKgpQq7oX0Rkazbz52t-lkg)
+
+![RNNStar](https://drive.google.com/uc?export=view&id=1abIZwp4jQh3bGkl1KQJgejRxGVNbxJYd)
+
+
+
+
+
+
+
+
+
+
+
+The summary of the results so far is:
+
+| Model       |  Parameters           | MSE        |
+|:-----------:|:---------------------:|:----------:| 
+| Naive Avg   | Training Data Average |    0.356   |  
+| ARIMA       |       (40,2,30)       |   0.202    |
+| RNN*        | ReLU, avoid overfitting |   0.208  |
+
+
+
+And for the neural network models (will update once run more experiments)
+
+
+
+| Model       |  Learning Rate (ADAM) | Activation | MSE        |
+|:-----------:|:---------------------:|:----------:|:----------:|   
+| RNN         |            0.005      |     'ReLU' |    0.028   |
+| GRU         |                       |            |            |
+| LSTM        |                       |            |            |
+| Transformer |                       |            |            |
+
+
+The difference between RNN and RNN* is not the model itself, it is exactly the same training and weights, but it is the __forecasting__. For RNN*, we produce all the test data having access to only the training data. For RNN, we only predict the next step on the training data, so using the information up to that particular step. Notice however that there is no retraining, the model is still the same. I want to explore more the forecasting subtleties for my next Sprint.
+
