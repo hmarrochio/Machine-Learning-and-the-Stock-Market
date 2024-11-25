@@ -59,7 +59,7 @@ There are three csv files:
 
 
 
-### Overview about EDA
+### Overview about EDA (Notebook 1)
 
 The first step of my EDA is simply to learn about the properties of the companies featured in S&P-500, in terms of participation in the stock market capital and which sectors are more represented. 
 
@@ -71,7 +71,7 @@ At least for this part of the analysis, correlation matrices are the most import
 
 Finally, we can calculate the eigenvalues for the correlation matrices between stock symbols. By analyzing the structure of the distribution of the eigenvalues, we can isolate which range is most likely due to random correlations, by fitting to the expectation of RMT and the Marcenko-Pastur pdf.
 
-### Eigenvalue Analysis and Denoising
+### Eigenvalue Analysis and Denoising (Notebook 2-3)
 
 
 
@@ -107,7 +107,7 @@ Notice that for the eigenvalues __outside__ the random range, they remain the sa
 
 
 
-### Unsupervised Machine Learning Modeling - Clustering
+### Unsupervised Machine Learning Modeling - Clustering (Notebook 3)
 
 For the first modeling analysis, we perform unsuperviser learning techniques in order to find stocks that are deeply related to each other. Notice that the model is agnostic in terms of industry: all the information we are analyzing is the `Log-Return` correlation between 100 stocks, using 5 years of data. 
 
@@ -131,35 +131,30 @@ It is worth mentioning that by investigating the individual clusters, we can see
 
 This clustering analysis was done by denoising the correlation matrix. In Jupyter Notebook 3, we show that under similar circumstances, the clustering algorithm did not perform as well if the original data was not denoised. Despite similar sillhoutte score, the clusters generate a few classes with two many industries joined, as well as some classes almost empty - one of them only had `Google` stocks. So at least as a first impression, it seems that denoising was a useful technique for clustering.
 
-### Forecasting Time Series - Preliminary Analysis
+### Forecasting Time Series - Preliminary Analysis (Notebook 4)
 
 In this section we present some preliminary results from time series analysis. We evaluate naive forecasting, ARIMA and Recurrent Neural Networks (RNN). The metric I am using to evaluate model performance is Mean Squared Error with the test data. We divide the training data into 2 years of trading, and the test as 4 months. 
 
-We test both `Log-Return` and `Adj Close` (price) for prediction, but here I will focus on showing the results for the price.
+We test both `Log-Return` and `Adj Close` (price) for prediction, but here I will focus on showing the results for the price. For Naive forecasting, we only use the average value of the training data as a predictor. We refer the reader to notebook 4 for more details.
 
-
-
-
+Consider the prediction for the ARIMA below. We see that there is overfitting, but there is some trend being predicted correctly far into the future. For the next Sprint, I plan to investigate how to improve the ARIMA predictions, including rolling window and next day prediction only.
 
 
 ![ArimaAll](https://drive.google.com/uc?export=view&id=1zGYA8FuDwPI9lSYMKI3lJ844NyRlCbIT)
 
+Next, we used a simple RNN architecture, with `ReLU` activation functions, more detials in notebook 4. We used rolling window of 40 data points for training and prediction. We could train the RNN with more parameters and for longer in order to decrease MSE for the model if predicting only the _next data point_, but since I also wanted to forecast further into the future, I tried to attenuate overfitting. Notice that the model only _"learns"_ using the training data, but for forecasting I used the test data at point $i$ to predict $i+1$.
+
 
 ![RNNAll](https://drive.google.com/uc?export=view&id=1xCgGa6KosnKgpQq7oX0Rkazbz52t-lkg)
+
+If we were to only use the predictions themselves to forecast further into the future, the model performs similarly to ARIMA. Notice that despite the RNN being exactly the same (with the same weights and only access to training data for training), the forecasting here never sees any of the test data, which explains why it performs much worse. Just in order to differentiate the forecasting method, I called this result __RNN*__.
 
 ![RNNStar](https://drive.google.com/uc?export=view&id=1abIZwp4jQh3bGkl1KQJgejRxGVNbxJYd)
 
 
+In the following table we find a summary of the results so far, as well as the next experiments I want to perform. I also want to explore better the nuances between forecasting the time series into the test data discussed earlier.
 
 
-
-
-
-
-
-
-
-The summary of the results so far is:
 
 | Model       |  Parameters           | MSE        |
 |:-----------:|:---------------------:|:----------:| 
@@ -169,7 +164,7 @@ The summary of the results so far is:
 
 
 
-And for the neural network models (will update once run more experiments)
+For the neural network models and forecasting the next point in the test data (will update once run more experiments):
 
 
 
@@ -179,7 +174,3 @@ And for the neural network models (will update once run more experiments)
 | GRU         |                       |            |            |
 | LSTM        |                       |            |            |
 | Transformer |                       |            |            |
-
-
-The difference between RNN and RNN* is not the model itself, it is exactly the same training and weights, but it is the __forecasting__. For RNN*, we produce all the test data having access to only the training data. For RNN, we only predict the next step on the training data, so using the information up to that particular step. Notice however that there is no retraining, the model is still the same. I want to explore more the forecasting subtleties for my next Sprint.
-
