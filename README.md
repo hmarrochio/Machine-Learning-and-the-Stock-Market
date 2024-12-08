@@ -131,46 +131,57 @@ It is worth mentioning that by investigating the individual clusters, we can see
 
 This clustering analysis was done by denoising the correlation matrix. In Jupyter Notebook 3, we show that under similar circumstances, the clustering algorithm did not perform as well if the original data was not denoised. Despite similar sillhoutte score, the clusters generate a few classes with two many industries joined, as well as some classes almost empty - one of them only had `Google` stocks. So at least as a first impression, it seems that denoising was a useful technique for clustering.
 
-### Forecasting Time Series - Preliminary Analysis (Notebook 4)
+### Forecasting Time Series - (Notebook 4)
 
-In this section we present some preliminary results from time series analysis. We evaluate naive forecasting, ARIMA and Recurrent Neural Networks (RNN). The metric I am using to evaluate model performance is Mean Squared Error with the test data. We divide the training data into 2 years of trading, and the test as 4 months. 
+In this section we present our time series forecasting analysis. We focus our efforts into investigating hyperparameters for a simple Recurrent Neural Network (RNN), as well as GRU and LSTM. The metric I am using both to evaluate model performance and training loss is `Mean Squared Error`. We divide the training into 2 years of trading data, the test as the next 4 months and rolling window of size $40$ data points.  We investigate `Adj Close` (price) time series for prediction. 
 
-We test both `Log-Return` and `Adj Close` (price) for prediction, but here I will focus on showing the results for the price. For Naive forecasting, we only use the average value of the training data as a predictor. We refer the reader to notebook 4 for more details.
+The summary of the best hyperparameters we found using the Apple stock is (we did not perform full time series cross validation, but we performed several experiments in Notebook 4 Appendices C-D):
 
-Consider the prediction for the ARIMA below. We see that there is overfitting, but there is some trend being predicted correctly far into the future. For the next Sprint, I plan to investigate how to improve the ARIMA predictions, including rolling window and next day prediction only.
-
-
-![ArimaAll](https://drive.google.com/uc?export=view&id=1zGYA8FuDwPI9lSYMKI3lJ844NyRlCbIT)
-
-Next, we used a simple RNN architecture, with `ReLU` activation functions, more detials in notebook 4. We used rolling window of 40 data points for training and prediction. We could train the RNN with more parameters and for longer in order to decrease MSE for the model if predicting only the _next data point_, but since I also wanted to forecast further into the future, I tried to attenuate overfitting. Notice that the model only _"learns"_ using the training data, but for forecasting I used the test data at point $i$ to predict $i+1$.
-
-
-![RNNAll](https://drive.google.com/uc?export=view&id=1xCgGa6KosnKgpQq7oX0Rkazbz52t-lkg)
-
-If we were to only use the predictions themselves to forecast further into the future, the model performs similarly to ARIMA. Notice that despite the RNN being exactly the same (with the same weights and only access to training data for training), the forecasting here never sees any of the test data, which explains why it performs much worse. Just in order to differentiate the forecasting method, I called this result __RNN*__.
-
-![RNNStar](https://drive.google.com/uc?export=view&id=1abIZwp4jQh3bGkl1KQJgejRxGVNbxJYd)
+|                       |  Simple RNN           | GRU        | LSTM       |
+|:----------------------|:---------------------:|:----------:|:----------:|   
+| __A__-Hidden States   |         40-80-40      |   40-80-40 |   40-80-40 |
+| __B__ - Activation    |      Relu             |  Relu      |  Relu      |
+| __C__ - Dropout       |      0.05             |      0.05  |     0.05   |
+| __D__ - Batch         |                2      |      2     |    2       |
+| __E__ - Learning Rate |               0.001   |     0.001  |    0.001   |
+| __F__ - Optimizer     |              Adam     |     Adam   |  RMSprop   |
+| __MSE train__         |           0.0029      |   0.0029   |  0.0035    |
+| __MSE test__          |          0.0017       |   0.0011   |     0.0039 |
 
 
-In the following table we find a summary of the results so far, as well as the next experiments I want to perform. I also want to explore better the nuances between forecasting the time series into the test data discussed earlier.
+First, let us focus only on the test data range, for readability. We see the three models successfully captured the shape of the price trend.
+
+![Price_focus](https://drive.google.com/uc?export=view&id=1n7rYT5OvBa8XXwwcLZGd5os9slMt6B05)
+
+It is important to recall that since this is the test data, the model was __not trained__ having access to it, or in other words, the prices in this date range were not used as a target variable during training.
+
+For completeness, we show here the full range of the neural network predictions for our data, both within training and test date range. 
+
+![Price_all](https://drive.google.com/uc?export=view&id=1OguZr3hMkAcZWQcPtzmlD_6ujMeaUUKP)
+
+Despite not performing a full time series cross validation, the architecture we fixed also successfully captured price trends for other stocks. We tested price variation from other industries, such that the movements are not necessarily directly correlated: Walmart, JP Morgan and Chevron. We show below the predictions for Walmart.
+
+![Walmart](https://drive.google.com/uc?export=view&id=1uuiqK8habl1tVst904IIq_A5P1Bcf1wz)
+
+Notice that despite not investigating the best hyperparameters for this particular stock, the models analyzed were successful in predicting the overall trends, as well as a reasonable MSE score. We summarize our findings below, more details in notebook 4.
 
 
+|           | Simple RNN, MSE test        | GRU , MSE test        | LSTM, MSE test        |
+|:----------|:---------------------------:|:---------------------:|:---------------------:|   
+| Apple     |         0.0017              |         0.0011        |         0.0039        |
+| Walmart   |         0.0004              |         0.0020        |         0.0012        |
+| JP Morgan |         0.0013              |         0.0105        |         0.0016        |
+| Chevron   |         0.0042              |         0.0022        |          0.0006       |
 
-| Model       |  Parameters           | MSE        |
-|:-----------:|:---------------------:|:----------:| 
-| Naive Avg   | Training Data Average |    0.356   |  
-| ARIMA       |       (40,2,30)       |   0.202    |
-| RNN*        | ReLU, avoid overfitting |   0.208  |
+The last investigation in notebook 4 is related about alternative methods. We investigate ARIMA and a naive forecasting.
+
+For ARIMA, we try to mimic the forecasting techniques of the Neural Network: given 40 feature points and a target (the next value in the time series), find a predictive model. We have to __fit a different model for every window__. The best ARIMA MSE was $0.0015$ for parameters (p=10,d=2,q=10). Despite being a smaller MSE than the Neural Network experiments, it seems that it oscillates more around the data than the NN models we investigated. Therefore, it might not have predicted the market trends as well the neural network ones. 
 
 
+![ARIMA](https://drive.google.com/uc?export=view&id=1NRa3k4FezxHjLcc10gFUZYMwd-8ygKW_)
 
-For the neural network models and forecasting the next point in the test data (will update once run more experiments):
+We did not experiment as much with the ARIMA hyperparameters. It would be interesting to investigate this further, as well as exploring different metrics to determine whether ARIMA or neural network predicted better the trends of the market.
 
 
+### Reinforcement Learning Trader - (Notebook 5)
 
-| Model       |  Learning Rate (ADAM) | Activation | MSE        |
-|:-----------:|:---------------------:|:----------:|:----------:|   
-| RNN         |            0.005      |     'ReLU' |    0.028   |
-| GRU         |                       |            |            |
-| LSTM        |                       |            |            |
-| Transformer |                       |            |            |
