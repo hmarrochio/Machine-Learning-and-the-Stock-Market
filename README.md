@@ -1,4 +1,4 @@
-# MAchine LEarning techniques and the Stock Market.
+# Machine LEarning techniques and the Stock Market.
 
 
 Predicting the stock market is a very complicated task. I plan to use techniques from Physics and Mathematics, in particular insights from Random Matrix Theory, in order to characterize randomness in movements of stocks, and use it as regularization in order to explore
