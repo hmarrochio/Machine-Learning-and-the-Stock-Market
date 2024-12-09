@@ -1,7 +1,5 @@
-# CAPSTONE SPRINT 2 - README
+# MAchine LEarning techniques and the Stock Market.
 
-
-### Random Matrix Theory and the Stock Market
 
 Predicting the stock market is a very complicated task. I plan to use techniques from Physics and Mathematics, in particular insights from Random Matrix Theory, in order to characterize randomness in movements of stocks, and use it as regularization in order to explore
 machine learning models of clustering, time series forecasting and incorporate these insights for portfolio strategies.
