@@ -252,7 +252,8 @@ __Incentives__:
 Notice how we were successful in increasing our `wealth`, despite how primitive the model is - for instance, we can't even sell or buy more than one position a day! The important trend is that whenever the price was increasing, we had an incentive to sell positions, adn when it was decreasing, we would hold or buy. Notice that the data to the right of the black line is unseen data. 
 
 
-![Time](https://drive.google.com/uc?export=view&id=1ubs6dqB6dhhoLj3g47g-wYaZzMX4lNSn_)
+
+![Time](https://drive.google.com/uc?export=view&id=1ubs6dqB6dhhoLj3g47g-wYaZzMX4lNSn)
 
 This is the main plot of our Reinforcement Learning for now. Some very important properties: The RL trader was selling the positions as the price was high, then for a long time was alternating between buying and holding.
 
