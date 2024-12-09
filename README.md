@@ -255,12 +255,13 @@ Notice how we were successful in increasing our `wealth`, despite how primitive 
 
 ![Time](https://drive.google.com/uc?export=view&id=1ubs6dqB6dhhoLj3g47g-wYaZzMX4lNSn)
 
+
 This is the main plot of our Reinforcement Learning for now. Some very important properties: The RL trader was selling the positions as the price was high, then for a long time was alternating between buying and holding.
 
 One very nice feature of this experiment is that whenever it saw another rise in price the test data, it started selling again to make a profit, and we see it was done selling by the last point, as comparing to the previous moving average, it is probably crossing a low price point again.
 
 
-![Wealth](https://drive.google.com/uc?export=view&id=1ubs6dqB6dhhoLj3g47g-wYaZzMX4lNSn)
+![Wealth](https://drive.google.com/uc?export=view&id=1fIdtyhi85CgIR1UTMoxURJYbRuys5keC)
 
 
 
