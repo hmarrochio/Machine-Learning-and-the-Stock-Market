@@ -14,14 +14,22 @@ machine learning models of clustering, time series forecasting and incorporate t
 Studying stock market data is a great laboratory for testing the efficacy of machine learning techniques. An important challenge in the industry is portfolio optimization: given risk and uncertainty, how can one maximize returns over time? Machine learning offers valuable insights here. For instance, unsupervised learning can be used to cluster together similar stocks, which is useful for portfolio diversification by avoiding focusing resources in similar stocks. In addition, the past few years have witnessed important developement in deep learning applications across industries, solving complex problems with non-linear predictive capabilities. Since some techniques are still quite recent, it is worth asking how effectively can deep learning techniques analyze historical stock data for improved predictions.
 
 
-This project has two main objectives: first, to use real stock data as a learning tool for exploring and practicing various machine learning techniques; second, to investigate whether insights from Random Matrix Theory (RMT) can improve the predictions from these algorithms. While the practical application of these methods to actual investment strategies involves many nuances, this project focuses on exploring these ideas in a theoretical and experimental framework by analyzing historical data.
+This project has two main objectives: first, to use real stock data as a learning tool for exploring and practicing various machine learning techniques; we actually investigate three different learning problems: unsupervised, supervised and reinforcement learning. Second, to investigate whether insights from Random Matrix Theory (RMT) can improve the predictions from these algorithms. While the practical application of these methods to actual investment strategies involves many nuances, this project focuses on exploring these ideas in a theoretical and experimental framework by analyzing historical data. 
 
 
 By benchmarking the range of randomness in the data using RMT techniques, we aim to uncover the "true" signal between stocks. If the correlation between stocks are less influenced by random data, clustering algorithms should better identify stock similarities.  At least at this stage, this is exactly what we find: denoising the correlation matrix is a useful technique for clustering the correlation matrix! Among the three clustering algorithms tested, Agglomerative Clustering performed the best for this task.
 
-Next, we shift gears to time series prediction. The goal is to test machine learning algorithms in order to predict future prices of stocks, as this information is crucial to optimize portfolio strategies. For now, we focus on predictions using ARIMA and Recurrent Neural Networks. 
+Next, we shift gears to time series prediction. We analyze time series forecasting with RNN, GRU, and LSTM models, optimizing hyperparameters to predict Adj Close prices using Apple stock data. Training spans two years, with a four-month test set and a rolling window of 40 points. Models effectively capture price trends, generalizing well to other stocks like Walmart and Chevron. We also compare ARIMA, which achieves competitive MSE but seems to struggle with trend consistency, highlighting the strengths of neural networks for market predictions.
 
-For future developments, I plan to explore advanced deep learning models such LSTM, GRU, and Transformers. Once a successful baseline model is established, I intend to revisit the portfolio optimization problem using these insights.
+Finally, we trained a reinforcement learning algorithm to simulate trading using historical data. Given the high computational demand of RL training, we scaled down to a rolling window of size 3, with 2 months of training data and 1 month for testing. By carefully tweaking the reward function, we successfully mimicked a profitable trading strategy, demonstrating the potential of this approach even in a simplified model. Future work will focus on expanding this framework, incorporating longer time windows, exploring more complex reward structures, and improving trading constraints, such as adjusting the number of stocks that can be sold and bought each day.
+
+
+
+
+
+
+
+
 
 
 ### Data Description
@@ -131,7 +139,7 @@ It is worth mentioning that by investigating the individual clusters, we can see
 
 This clustering analysis was done by denoising the correlation matrix. In Jupyter Notebook 3, we show that under similar circumstances, the clustering algorithm did not perform as well if the original data was not denoised. Despite similar sillhoutte score, the clusters generate a few classes with two many industries joined, as well as some classes almost empty - one of them only had `Google` stocks. So at least as a first impression, it seems that denoising was a useful technique for clustering.
 
-### Forecasting Time Series - (Notebook 4)
+### Superviser Learning - Forecasting Time Series - (Notebook 4)
 
 In this section we present our time series forecasting analysis. We focus our efforts into investigating hyperparameters for a simple Recurrent Neural Network (RNN), as well as GRU and LSTM. The metric I am using both to evaluate model performance and training loss is `Mean Squared Error`. We divide the training into 2 years of trading data, the test as the next 4 months and rolling window of size $40$ data points.  We investigate `Adj Close` (price) time series for prediction. 
 
@@ -185,3 +193,94 @@ We did not experiment as much with the ARIMA hyperparameters. It would be intere
 
 ### Reinforcement Learning Trader - (Notebook 5)
 
+For the final Machine Learning model we explore, we change gears to reinforcement learning. The overall goal is to construct an agent (trader) that interacts with the environemnt and learns through iteractive rewards how to trade.
+
+Training a very robust reinforcement learning of course is outside the scope of this project, my goal is at least to do a proof of concept and have the bases of a reinforcemen learning trader set up. We leave performing a detailed analysis for a future project.
+
+The model analyzed is quite simple: There are three possible actions:
+
+- 0: __Buy__
+- 1: __Hold__
+- 2: __Sell__
+
+In addition, one restriction is that at each day, you can either buy or sell only one stock position. Once again, the goal here is not to construct a robust trader, but to start from a simple model that we can analyze on a personal computer as a laboratory for different incentives. 
+
+The learning algorithm we consider is of a deep Q-learning problem. We do not train a deep neural network, but still choose this approach being a building block for 
+
+There are a few steps for the model being analyzed:
+
+__Pre-processing__
+
+- A) Create rolling window of size 3 for 2 months of training data and 1 month of testing.
+- B) Train a Neural Network to forecast the next price point in the rolling window. I will call this Neural Network __NN1__.
+- C) Once NN1 is trained, we will __not__ update its weights.
+
+__Q-Learning:__
+
+- D) Start the Q-learning process. The state we will consider is the rolling window size of 3 prices (price today plus two previous ones), as well as the __forecasted price__ from NN1. So the state will consist of 4 price values.
+- E) Train the network as usual, via a reward feedback, and a exploitation versus exploration trade-off.
+
+
+It is interesting to describe a bit the logic behind a few of our reward options. 
+
+__Incentives__:
+
+- __Make small profit every day__
+
+  $\text{portfolio}_\text{new} = \text{portfolio}_{\text{old}} + \left( \text{positions} \, \times \, \text{price}_{\text{today}} \right) $
+
+  
+  $\text{reward} = \frac{\text{portfolio}_\text{new}-\text{portfolio}_\text{old}}{\text{portfolio}_\text{old}} $
+  
+- __Compare prices with previous mean__:
+
+  Suppose we have the average of the previous prices we have access to. Of course we can make a moving average over more sophisticated models, but for now we restrict ourselves to the previous points in the training data.
+
+  We call two quantities the auxiliary mean and the auxiliary standard deviation
+
+  $\mu_\text{aux} = \text{mean}(\text{prices} [\text{Day}1:\text{Today}])$
+
+  $\sigma_\text{aux} =\text{std}(\text{prices} [\text{Day}1:\text{Today}])$
+
+  We therefore add a reward that incentives selling when the price is above the auxiliary average, and buy when it is below. We divide by the standard deviation to account for market volatility.
+
+
+  $\text{reward} = \frac{p-\mu_\text{aux}}{\sigma_\text{aux} }$
+
+
+
+Notice how we were successful in increasing our `wealth`, despite how primitive the model is - for instance, we can't even sell or buy more than one position a day! The important trend is that whenever the price was increasing, we had an incentive to sell positions, adn when it was decreasing, we would hold or buy. Notice that the data to the right of the black line is unseen data. 
+
+![Wealth](https://drive.google.com/uc?export=view&id=1fIdtyhi85CgIR1UTMoxURJYbRuys5keC)
+
+This is the main plot of our Reinforcement Learning for now. Some very important properties: The RL trader was selling the positions as the price was high, then for a long time was alternating between buying and holding.
+
+One very nice feature of this experiment is that whenever it saw another rise in price the test data, it started selling again to make a profit, and we see it was done selling by the last point, as comparing to the previous moving average, it is probably crossing a low price point again.
+
+![Time](https://drive.google.com/uc?export=view&id=1ubs6dqB6dhhoLj3g47g-wYaZzMX4lNSn_)
+
+
+
+
+
+### Conclusion
+
+This project had the main goal of applying and practicing different machine learning techniques to the stock market, which is a notoriously challenging problem to tackle. Making predictions in the stock market is difficult because of the mix of randomness and signal, so using multiple approaches and techniques is a good strategy to extract meaningful insights.
+
+First, during the EDA, we pre-processed the stock time series and analyzed the properties of correlations between stocks. Using Random Matrix Theory, we were able to partly regularize the randomness from the signal in the correlation matrix. Denoising proved to be a useful tool for clustering algorithms, with Agglomerative Clustering performing the best. This helped us identify clear groups of stocks related by sector, such as healthcare, financials, or oil, as well as some (slightly) unexpected relationships, like big tech and credit card companies clustering together.
+
+Next, for time series forecasting, we investigated RNN, GRU, and LSTM models, exploring their best hyperparameters to predict adjusted closing prices. These models successfully captured price trends for multiple stocks, including Apple, Walmart, and Chevron. When compared to ARIMA, neural networks seemed to perform better in terms of predicting market trends, even though ARIMA achieved similar MSE in some cases. This suggests that neural networks are better suited for non-linear time series forecasting.
+
+Finally, we implemented a reinforcement learning trader as a proof of concept. The RL model was kept simple to allow for experimentation, with a rolling window of size 3 and basic trading actions (buy, hold, sell). By tweaking reward functions, we were able to simulate a successful trading strategy, showing the potential of RL in this space. Future work will focus on expanding the RL model, allowing for longer time windows, more complex reward functions, and greater flexibility in trading decisions, such as varying the number of stocks bought or sold each day.
+
+Overall, this project shows how machine learning techniques can lead to interesting and meaningful results in stock market analysis. Random Matrix Theory was a useful tool for the clustering analysis, one possible investigation to the future is whether one can apply similar insights to forecasting and reinforcement learning. 
+
+
+
+
+
+
+
+
+
+  
