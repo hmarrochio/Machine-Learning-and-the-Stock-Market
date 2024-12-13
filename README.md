@@ -1,8 +1,8 @@
-# Machine LEarning techniques and the Stock Market.
+# Machine Learning techniques and the Stock Market.
 
 
-Predicting the stock market is a very complicated task. I plan to use techniques from Physics and Mathematics, in particular insights from Random Matrix Theory, in order to characterize randomness in movements of stocks, and use it as regularization in order to explore
-machine learning models of clustering, time series forecasting and incorporate these insights for portfolio strategies.
+Predicting the stock market is a very complicated task. In this project, I plan to investigate historical stock data through the lenses of three different Machine Learning techniques: Unsupervised, supervised and reinforcement learning. Using concepts from Physics and Mathematics, in particular insights from Random Matrix Theory, we will cluster stocks with similar movements together. Next, we investigate Neural Network architectures for future price forecasting. Lastly, we build a simple model of a reinforcement learning automated trader as a building block for future project development. 
+
 
 
 
@@ -17,9 +17,9 @@ This project has two main objectives: first, to use real stock data as a learnin
 
 By benchmarking the range of randomness in the data using RMT techniques, we aim to uncover the "true" signal between stocks. If the correlation between stocks are less influenced by random data, clustering algorithms should better identify stock similarities.  At least at this stage, this is exactly what we find: denoising the correlation matrix is a useful technique for clustering the correlation matrix! Among the three clustering algorithms tested, Agglomerative Clustering performed the best for this task.
 
-Next, we shift gears to time series prediction. We analyze time series forecasting with RNN, GRU, and LSTM models, optimizing hyperparameters to predict Adj Close prices using Apple stock data. Training spans two years, with a four-month test set and a rolling window of 40 points. Models effectively capture price trends, generalizing well to other stocks like Walmart and Chevron. We also compare ARIMA, which achieves competitive MSE but seems to struggle with trend consistency, highlighting the strengths of neural networks for market predictions.
+Next, we shift gears to time series prediction. We analyze time series forecasting with RNN, GRU, and LSTM models, optimizing hyperparameters to predict Adj Close prices using Apple stock data. Training spans two years, with a four-month test set and a rolling window of 40 points. Models effectively capture price trends, generalizing well to other stocks like JP Morgan and Chevron. We also compare ARIMA, which achieves competitive MSE but seems to struggle with trend consistency, highlighting the strengths of neural networks for market predictions.
 
-Finally, we trained a reinforcement learning algorithm to simulate trading using historical data. Given the high computational demand of RL training, we scaled down to a rolling window of size 3, with 2 months of training data and 1 month for testing. By carefully tweaking the reward function, we successfully mimicked a profitable trading strategy, demonstrating the potential of this approach even in a simplified model. Future work will focus on expanding this framework, incorporating longer time windows, exploring more complex reward structures, and improving trading constraints, such as adjusting the number of stocks that can be sold and bought each day.
+Finally, we trained a reinforcement learning algorithm to simulate trading using historical data. Given the high computational demand of RL training, we scaled down to a rolling window of size 3, with 2 months of training data. By carefully tweaking the reward function, we successfully mimicked a profitable trading strategy, demonstrating the potential of this approach even in a simplified model. Future work will focus on expanding this framework, incorporating longer time windows, exploring more complex reward structures, and improving trading constraints, such as adjusting the number of stocks that can be sold and bought each day.
 
 
 
@@ -165,19 +165,21 @@ For completeness, we show here the full range of the neural network predictions 
 
 ![Price_all](https://drive.google.com/uc?export=view&id=1OguZr3hMkAcZWQcPtzmlD_6ujMeaUUKP)
 
-Despite not performing a full time series cross validation, the architecture we fixed also successfully captured price trends for other stocks. We tested price variation from other industries, such that the movements are not necessarily directly correlated: Walmart, JP Morgan and Chevron. We show below the predictions for Walmart.
+Despite not performing a full time series cross validation, the architecture we fixed also successfully captured price trends for other stocks. We tested price variation from other industries, such that the movements are not necessarily directly correlated: Walmart, JP Morgan and Chevron. We show below the predictions for JP Morgan.
 
-![Walmart](https://drive.google.com/uc?export=view&id=1uuiqK8habl1tVst904IIq_A5P1Bcf1wz)
 
-Notice that despite not investigating the best hyperparameters for this particular stock, the models analyzed were successful in predicting the overall trends, as well as a reasonable MSE score. We summarize our findings below, more details in notebook 4.
+![JPM](https://drive.google.com/uc?export=view&id=1fjkKpMtrRE7muDoXscyJNNeh7flfuQ3I)
+
+Notice that we did __not retraining__ the network, but the models analyzed were still successful in predicting the overall trends, as well as a reasonable MSE score. We summarize our findings below, more details in notebook 4 (notice that the MSE has naturally a different scale since the overall price of the stocks are different).
+
 
 
 |           | Simple RNN, MSE test        | GRU , MSE test        | LSTM, MSE test        |
 |:----------|:---------------------------:|:---------------------:|:---------------------:|   
-| Apple     |         0.0017              |         0.0011        |         0.0039        |
-| Walmart   |         0.0004              |         0.0020        |         0.0012        |
-| JP Morgan |         0.0013              |         0.0105        |         0.0016        |
-| Chevron   |         0.0042              |         0.0022        |          0.0006       |
+| Apple     |         0.022               |         0.022         |         0.029         |
+| Walmart   |         0.0017              |         0.0017        |         0.0022        |
+| JP Morgan |         0.020               |         0.020         |         0.028         |
+| Chevron   |         0.022               |         0.022         |           0.029       |
 
 The last investigation in notebook 4 is related about alternative methods. We investigate ARIMA and a naive forecasting.
 
@@ -225,10 +227,10 @@ __Incentives__:
 
 - __Make small profit every day__
 
-  $\text{portfolio}_\text{new} = \text{portfolio}_{\text{old}} + \left( \text{positions} \, \times \, \text{price}_{\text{today}} \right) $
+   portfolio_new = portfolio_old + (positions × price_today)
 
   
-  $\text{reward} = \frac{\text{portfolio}_\text{new}-\text{portfolio}_\text{old}}{\text{portfolio}_\text{old}} $
+   reward = (portfolio_new - portfolio_old) / portfolio_old
   
 - __Compare prices with previous mean__:
 
